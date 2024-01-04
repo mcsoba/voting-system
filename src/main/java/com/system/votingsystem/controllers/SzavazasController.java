@@ -3,6 +3,7 @@ package com.system.votingsystem.controllers;
 
 import com.system.votingsystem.dto.ErrorResponse;
 import com.system.votingsystem.dto.SzavazasResponse;
+import com.system.votingsystem.dto.SzavazatResponse;
 import com.system.votingsystem.entities.Szavazas;
 import com.system.votingsystem.exceptions.DuplikaltIdoException;
 import com.system.votingsystem.exceptions.DuplikaltSzavazasException;
@@ -62,6 +63,23 @@ public class SzavazasController {
         Optional<Szavazas> szavazasEntity = szavazasService.getSzavazasById(id);
         return szavazasEntity.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/szavazat/")
+    public ResponseEntity<SzavazatResponse> getKepviseloSzavazat(
+            @RequestParam(value = "szavazas") String szavazas,
+            @RequestParam(value = "kepviselo") String kepviselo) {
+        try {
+            Optional<String> szavazat = szavazasService.getKepviseloSzavazat(szavazas, kepviselo);
+            return szavazat.map(s -> ResponseEntity.ok(new SzavazatResponse(s)))
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new SzavazatResponse(e.getMessage()));
+        }
+    }
+
+
+
+
 
 }
 

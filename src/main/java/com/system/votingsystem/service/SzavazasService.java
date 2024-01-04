@@ -68,6 +68,19 @@ public class SzavazasService {
             throw new DuplikaltIdoException("Már történt szavazás ezen az időponton.");
         }
     }
+
+    public Optional<String> getKepviseloSzavazat(String szavazasId, String kepviseloId) {
+        Optional<Szavazas> szavazasOptional = szavazasRepository.findById(szavazasId);
+        if (szavazasOptional.isPresent()) {
+            Szavazas szavazas = szavazasOptional.get();
+            for (Szavazat szavazat : szavazas.getSzavazatok()) {
+                if (szavazat.getKepviselo().equals(kepviseloId)) {
+                    return Optional.of(szavazat.getSzavazat());
+                }
+            }
+        }
+        return Optional.empty();
+    }
 }
 
 

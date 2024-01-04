@@ -4,6 +4,7 @@ import com.system.votingsystem.types.SzavazasTipus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -28,8 +29,10 @@ public class Szavazas {
     @NotEmpty(message = "Az elnök nem lehet üres.")
     private String elnok;
 
-    //    @NotNull(message = "A szavazat nem lehet nulla")
-    @OneToMany(mappedBy = "szavazas", cascade = CascadeType.ALL)
+ //@NotNull(message = "A szavazat nem lehet nulla")
+    @Size(min = 1, message = "A szavazatok nem lehet üres.")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "szavazas_id")
     private List<Szavazat> szavazatok;
 
     public Szavazas(LocalDateTime idopont, String targy, SzavazasTipus tipus, String elnok, List<Szavazat> szavazatok, String szavazasId) {
