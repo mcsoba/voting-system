@@ -4,6 +4,8 @@ package com.system.votingsystem.controllers;
 import com.system.votingsystem.dto.ErrorResponse;
 import com.system.votingsystem.dto.SzavazasResponse;
 import com.system.votingsystem.entities.Szavazas;
+import com.system.votingsystem.exceptions.DuplikaltIdoException;
+import com.system.votingsystem.exceptions.DuplikaltSzavazasException;
 import com.system.votingsystem.service.SzavazasService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -27,8 +29,16 @@ public class SzavazasController {
     @PostMapping("/szavazas")
     public ResponseEntity<?> szavazasRegisztracio(@Valid @RequestBody Szavazas szavazas) {
         try {
+            boolean elnokSzavazott = szavazasService.elnokSzavazott(szavazas);
+            if (!elnokSzavazott) {
+                return ResponseEntity.badRequest().body(new ErrorResponse("Az elnök nem szavazott."));
+            }
+            szavazasService.validateKepviselokSzavazas(szavazas);
+            szavazasService.validateIdopont(szavazas.getIdopont());
             Szavazas szavazasToValidate = szavazasService.rogzitSzavazas(szavazas);
             return ResponseEntity.ok(new SzavazasResponse(szavazasToValidate.getSzavazasId()));
+        } catch (DuplikaltSzavazasException | DuplikaltIdoException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         }
@@ -45,7 +55,6 @@ public class SzavazasController {
                 });
         return errors;
     }
-
 
     //lekérés
     @GetMapping("/szavazat/{id}")

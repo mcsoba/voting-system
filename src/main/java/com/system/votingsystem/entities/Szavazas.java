@@ -15,17 +15,17 @@ public class Szavazas {
     @Id
     @Column(name = "szavazas_id", unique = true)
     private String szavazasId;
-    @NotNull(message = "A dátum nem lehet nulla")
+    @NotNull(message = "A dátum nem lehet nulla.")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private LocalDateTime idopont;
-    @NotNull(message = "A tárgy nem lehet nulla")
-    @NotEmpty(message = "A tárgy nem lehet üres")
+    @NotNull(message = "A tárgy nem lehet nulla.")
+    @NotEmpty(message = "A tárgy nem lehet üres.")
     private String targy;
 
     @Enumerated(EnumType.STRING)
     private SzavazasTipus tipus;
-    @NotNull(message = "Az elnök nem lehet nulla")
-    @NotEmpty(message = "Az elnök nem lehet üres")
+    @NotNull(message = "Az elnök nem lehet nulla.")
+    @NotEmpty(message = "Az elnök nem lehet üres.")
     private String elnok;
 
     //    @NotNull(message = "A szavazat nem lehet nulla")

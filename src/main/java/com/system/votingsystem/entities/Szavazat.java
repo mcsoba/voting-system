@@ -12,10 +12,10 @@ public class Szavazat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Képviselő neve nem lehet üres")
+    @NotEmpty(message = "Képviselő neve nem lehet üres.")
     private String kepviselo;
 
-    @Pattern(regexp = "[i|n|t]", message = "A szavazat csak 'i', 'n' vagy 't' lehet")
+    @Pattern(regexp = "[i|n|t]", message = "A szavazat csak 'i', 'n' vagy 't' lehet.")
     @Column(name = "szavazat", length = 1)
     private String szavazat;
 
