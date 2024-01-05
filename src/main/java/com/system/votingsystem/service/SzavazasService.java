@@ -81,6 +81,19 @@ public class SzavazasService {
         }
         return Optional.empty();
     }
+
+    public int szavazasJelenlevokSzama(String szavazasId){
+        return szavazasRepository.getUtolsoSzavazasJelenlevok(szavazasId);
+    }
+
+    public double calcAtlagReszvet(LocalDateTime startDate, LocalDateTime endDate) {
+        long totalSzavazatok = szavazasRepository.totalSzavazatokCount(startDate, endDate);
+        long totalKepviselok = szavazasRepository.distinctSzavazatCount(startDate, endDate);
+        double atlagReszvetel = totalKepviselok > 0 ? (double) totalSzavazatok / totalKepviselok : 0.0;
+        return Math.round(atlagReszvetel * 100.0) / 100.0;
+    }
+
+
 }
 
 

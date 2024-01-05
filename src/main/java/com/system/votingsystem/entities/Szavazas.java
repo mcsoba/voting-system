@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 @Entity
@@ -91,5 +92,7 @@ public class Szavazas {
     public String getSzavazasId() {
         return szavazasId;
     }
+
+
 }
 
