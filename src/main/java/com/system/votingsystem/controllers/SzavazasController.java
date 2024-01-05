@@ -1,14 +1,12 @@
 package com.system.votingsystem.controllers;
 
 
-import com.system.votingsystem.dto.AtlagReszvetResponse;
-import com.system.votingsystem.dto.ErrorResponse;
-import com.system.votingsystem.dto.SzavazasResponse;
-import com.system.votingsystem.dto.SzavazatResponse;
+import com.system.votingsystem.dto.*;
 import com.system.votingsystem.entities.Szavazas;
 import com.system.votingsystem.exceptions.DuplikaltIdoException;
 import com.system.votingsystem.exceptions.DuplikaltSzavazasException;
 import com.system.votingsystem.service.SzavazasService;
+import com.system.votingsystem.types.EredmenyTipus;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -97,4 +95,19 @@ public class SzavazasController {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         }
     }
+
+    @GetMapping("/eredmeny/{szavazasId}")
+    public ResponseEntity<?> getEredmenyBySzavazasId(@PathVariable String szavazasId) {
+        try {
+            logger.info("Request received for /eredmeny");
+            EredmenyTipus eredmeny = szavazasService.calculateSzavazasEredmeny(szavazasId);
+            return ResponseEntity.ok(new SzavazasEredmenyResponse(eredmeny, szavazasService.getJelenlevokSzama(), szavazasService.getIgenekSzama(szavazasId),
+                    szavazasService.getNemekSzama(szavazasId), szavazasService.getTartozkodasokSzama(szavazasId)));
+        } catch (Exception e) {
+            logger.error("Request received for /eredmeny");
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+
 }
