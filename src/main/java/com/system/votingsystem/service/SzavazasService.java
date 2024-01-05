@@ -9,7 +9,9 @@ import com.system.votingsystem.types.EredmenyTipus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 @Service
@@ -127,21 +129,23 @@ public class SzavazasService {
     }
 
 
-    public int getIgenekSzama(String szavazasId)
-    {
+    public int getIgenekSzama(String szavazasId) {
         return szavazasRepository.countIgenSzavazatokBySzavazas(szavazasId);
     }
 
-    public int getNemekSzama(String szavazasId)
-    {
+    public int getNemekSzama(String szavazasId) {
         return szavazasRepository.countNemSzavazatokBySzavazas(szavazasId);
     }
 
-    public int getTartozkodasokSzama(String szavazasId)
-    {
+    public int getTartozkodasokSzama(String szavazasId) {
         return szavazasRepository.countTartozkodasSzavazatok(szavazasId);
     }
 
+    public List<Szavazas> keresSzavazasByDate(LocalDate localDate) {
+        LocalDateTime startDate = localDate.atStartOfDay();
+        LocalDateTime endDate = localDate.atTime(LocalTime.MAX);
+        return szavazasRepository.keresSzavazasokByDate(startDate, endDate);
+    }
 }
 
 

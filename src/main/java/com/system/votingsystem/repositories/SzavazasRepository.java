@@ -34,6 +34,12 @@ public interface SzavazasRepository extends JpaRepository<Szavazas, String> {
 
     @Query("SELECT COUNT(DISTINCT sz.id) FROM Szavazas sz WHERE sz.idopont BETWEEN :startDate AND :endDate AND sz.tipus <> 'j'")
     long distinctSzavazatCount(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
+    @Query("SELECT s FROM Szavazas s WHERE s.idopont BETWEEN :startDate AND :endDate")
+    List<Szavazas> keresSzavazasokByDate(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
+
+
 }
 
 

@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -109,5 +110,18 @@ public class SzavazasController {
         }
     }
 
+    @GetMapping("/napi-szavazasok/{date}")
+    public ResponseEntity<?> getNapiSzavazasok(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        try {
+            logger.info("Request received for /napi-szavazasok");
+            List<Szavazas> szavazasok = szavazasService.keresSzavazasByDate(date);
+            Map<String, List<Szavazas>> response = new HashMap<>();
+            response.put("szavazasok", szavazasok);
+            return ResponseEntity.ok(response);
+    } catch (Exception e) {
+        logger.error("Request received for /napi-szavazasok");
+        return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
+    }
 
+    }
 }
